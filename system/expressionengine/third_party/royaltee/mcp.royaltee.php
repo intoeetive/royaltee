@@ -32,8 +32,6 @@ class Royaltee_mcp {
     
     var $perpage = 25;
     
-    var $multiselect_fetch_limit = 50;
-    
     function __construct() { 
         // Make a local reference to the ExpressionEngine super object 
         $this->EE =& get_instance(); 

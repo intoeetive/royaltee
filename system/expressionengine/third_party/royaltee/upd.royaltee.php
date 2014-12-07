@@ -58,8 +58,8 @@ class Royaltee_upd {
 		//exp_royaltee_commissions
 		$fields = array(
 			'commission_id'		=> array('type' => 'INT',		'unsigned' => TRUE, 'auto_increment' => TRUE),
-			'order_id'			=> array('type' => 'INT',		'unsigned' => TRUE, 'default' => 0),
-			'method'			=> array('type' => 'VARCHAR',	'constraint'=> 50,	'default' => ''),//carttrob, brilliantretail, store, simplecommerce, withdraw
+			'order_id'			=> array('type' => 'INT',		'default' => 0),
+			'method'			=> array('type' => 'VARCHAR',	'constraint'=> 50,	'default' => ''),//carttrob, store, withdraw
 			'member_id'			=> array('type' => 'INT',		'unsigned' => TRUE, 'default' => 0),
 			'credits'			=> array('type' => 'DECIMAL',	'constraint' => '7,2', 'default' => 0),
 			'credits_pending'	=> array('type' => 'DECIMAL',	'constraint' => '7,2', 'default' => 0), //for withdraw requests

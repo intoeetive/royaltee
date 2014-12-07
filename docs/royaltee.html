@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-  <title>Affiliate Plus</title>
+  <title>RoyaltEE</title>
 
   <style type="text/css" media="screen,print">@import url("docs.css");</style>
 <META http-equiv=Content-Type content="text/html; charset=utf-8"></head>
@@ -26,15 +26,15 @@
 <div id="navlinks">
 <a href="http://www.intoeetive.com/">intoEEtive.com</a> &gt;
 <a href="http://www.intoeetive.com/index.php/category/extending_ee">EE add-ons</a> &gt;
-<a href="http://www.intoeetive.com/index.php/comments/affiliate_plus">Affiliate+</a>
+<a href="http://www.intoeetive.com/index.php/comments/royaltee">RoyaltEE</a>
 </div>
 
 
 <div id="content">
 
-	<h1>Affiliate Plus</h1>
+	<h1>RoyaltEE</h1>
 
-	<p>Affiliate+ is a system that makes managing referrals in ExpressionEngine easy. Highly customizable commission rules, stats, balance/withdraw system and DevDemon Credits integration. Integrates with CartThrob, Store and SimpleCommerce e-commerce modules. Simply saying, it's a referrals system that works well</p>
+	<p>If you ever wanted to pay commission/reward to authors/owners of items sold in your online store, RoyaltEE is the add-on the does just that! Define commissions rules on per-product basis and have the reward added instantly once orders are complete (using CartThrob or Store modules). Pay out using PayPal MassPay or manually.</p>
 	
 
 
@@ -52,13 +52,12 @@
 		<li><a href="#stats">Stats</a></li>
         <li><a href="#tags">Template tags</a>
             <ul>
-            <li><a href="#tags-link">Affiliate link</a></li>
             <li><a href="#tags-balance">Balance</a></li>   
 			<li><a href="#tags-stats">Stats</a></li>   
 			
 			<li><a href="#tags-payouts">Withdraw history</a></li>
 			<li><a href="#tags-withdraw">Request withdraw</a></li>          
-			<li><a href="#tags-referrer">Referrer</a></li>          
+      
             </ul>
         </li>
         
@@ -66,83 +65,38 @@
 
 	<h2><a name="general" href="#top">&uarr;</a>General concepts</h2>
 
-<p>With Affiliate+, anyone can be an affiliate. That means that anyone can generate an affiliate link (though not every link will result in commission, taking advantage of flexible commission rules explained below).</p>
+<p>In order to get RoyaltEE working for your store's items authors/owners, you need to set to custom field or RoyaltEE type in your products channel. You can create up to 5 rules based on total amount of author's items sold (not total commission).</p>
 
-<p>The referral commission is calculated separately for each item in the order (so you can set up the rules to include/exclude certain items).</p>
+<p>Author of entry in products channel is the one who gets the reward.</p>
 
-<p>The referral commission for each rule is summed up.</p>
+<p>Once someone purchases an item with commission rule(s) set up, the reward is added to author's virtual balance. If you have DevDemon Credits module installed, it is also recorded as a credit (so the user can spend it on your site). The commissions can be requested to withdraw using integrated PayPal MassPay feature, or you can perform payouts on individual basis manually.</p>
 
-<p>The link between affiliate and referral is established when affiliate link is clicked. The cookies need to be enabled in referral's browser. Registration is not required, but once refferal has created user account in your system (i.e. registered himself) the link becomes permanent and commission will be added even if referral makes purchase from other computer (guest purchases from his computer will not generate commission anymore).</p>
-
-<p>The referral record will not be made if user was registered before</p>
-
-<p>The module works with following e-comerce solutions: CartThrob, Store, Simple Commerce (PayPal cart is not supported)</p>
+<p>The module works with 2 most popular e-comerce solutions for ExpressionEngine: CartThrob and Store.</p>
 
 	<h2><a name="settings" href="#top">&uarr;</a>Settings</h2>
 
 <p>Before proceeding, you need to save your settings. You will not be permitted to access rest of module's control panel before you do so.</p>
 <p>The main settings are:
 <br />
-E-commerce solution used on your site (currently CartThrob, Store and SimpleCommerce are supported)<br />
-Minimum amount to withdraw (requests for smaller amounts will not be accepcted) - provide only number, without currency code<br />
+E-commerce solution used on your site (CartThrob or Store)<br />
+Minimum amount to withdraw (requests for smaller amounts will not be accepted) - provide only number, without currency code<br />
 Integrate with DevDemon Credits module (if set, every commission will also be recorded and credit and can then be used using Credits gateway)<br />
-Mark rule as "terminator" (all other rules of lower priority will not be processed)<br />
-Discounts treatment (because comission is calculated per-product, dicount need to de divided between items in the order, and it can be done proportinally to number of products in the order or to their price)
 </p>
 <p>PayPal MassPay API credentials are only required if you indend to perform payouts automatically using MassPay.</p>
 
 	<h2><a name="rules" href="#top">&uarr;</a>Commission rules explained</h2>
 	
-<p>The advantage of Affiliate+ is its approach of using multiple commission rules. Different commission can be used depending on who generated the link, what has been purchased; certain limits can be applied etc.</p>	
+<p><img src="royaltee_field.png" /></p>	
 
-<p>The 2 main types of commission rules are: <strong>fixed amount</strong> (credits, dollars) and <strong>percent from purchase</strong>.</p>
-
-<p>The rules are getting applied to each product in the order in sequence defined by their priority. The total commission for the product is calculates as the sum of commissions that can be applied. If some rule is marked as "terminator", the rules of lower priority are not applied and commission not added (other rules of same priority might be applied or not).</p>
-<p>The total commission for the purchase is calculated as the sum of commissions of each product. The rules used for each product can be different.</p>
-
-
-<p>You can <strong>restrict</strong> each rule to be applied only to:<br />
-&mdash; certain product groups (channels)<br />
-&mdash; certain products<br />
-&mdash; products with custom entry field set to "yes" or "1"<br />
-&mdash; purchases by refferals of certain affiliates<br />
-&mdash; purchases by refferals of certain affiliate groups (member groups)<br />
-&mdash; purchases by refferals of certain affiliate categories (<a href="http://www.intoeetive.com/index.php/comments/member-categories">member categories</a>)<br />
-&mdash; purchases by refferals of affiliates with custom profile field set to "yes" or "1"<br />
-&mdash; purchases done using selected payment gateways
+<p>Above is shown the example of rules setup for product entry. Let's suppose the item costs $10. Then, the author will get from each sale:<br />
+$1 if the total revenue from ALL products by this author is less than $1,000
+$1,20 if the total revenue from ALL products by this author is between $1,000 and $5,000
+$1,30 if the total revenue from ALL products by this author is between $5,000 and $10,000
+$1,40 if the total revenue from ALL products by this author is between $10,000 and $25,000
+$1,50 if the total revenue from ALL products by this author is more than $25,000
 </p>
 
-<p>Besides, you can make each rule be applicable only if following conditionals are met:<br />
-&mdash; same product has been purchased by affiliate<br />
-&mdash; the total amount of purchases by referral is greater than some amount (also requires customer to be logged in)<br />
-&mdash; the total number of purchases by referral is more than some number (also requires customer to be logged in)<br />
-&mdash; the refferal record was made not too long ago (time defined in seconds)
-</p>
-
-<p><strong>Example 1:</strong></p>
-<p>There are 2 rules: "All customers" (medium priority) giving affiliate 1% from every purchase, "Premium affiliates" rule (higher priority, marked as terminator) giving 2% from purchases for affiliates in "Premium members" group.</p>
-<p>The referred customer A, being not logged in, is byuing Product A for $100. The affiliate will get 1% = $1</p>
-<p>The referred customer B, referred by Premium affiliate, is byuing same Product A with a discount for $90. The affiliate will get 2% = $1.80</p>
-
-<p><strong>Example 2:</strong></p>
-<p>There are 3 rules: "Default rule" (medium priority) giving affiliate 1% from every purchase, "Premium products" rule (medium priority) giving 3% from purchase for selected products and "Special offer" (high priority), marked as terminator, giving $3 for products marked with "special offer" custom field.</p>
-<p>The referred customer A is byuing Product A for $100, which is not in list of selected product, neither marked as special offer. The affiliate will get 1% = $1</p>
-<p>The referred customer B is byuing Product B for $100, which IS in list of selected product, but not marked as special offer. The affiliate will get 1%+3% = $4</p>
-<p>The referred customer C is byuing Product C for $100, which IS in list of selected product, and has "special offer" custom field set to "yes". The affiliate will get $3</p>
-
-<p><strong>Example 3:</strong></p>
-<p>The affiliate is getting 5% from first $100 spent by referral, and 1% for all next purchases.</p>
-<p>This can be achieved by creating 2 rules: "1%" giving 1% for all purchases and "5% for first $100" giving 4% and limited to $100 on total amount of purchases. Note that 2nd rules gives 4%, not 5%, because the commissions are summed up.</p>
-<p>Another approach would be to make 2nd rule give 5%, set higher priority to it and make it a terminator. But in some cases such setup will behave differently: if the amount of first purchase is greater than $100, in 1st case the affiliate will get commission for all amount (5% from $100 and 1% from the rest of amount), but in 2nd case he will get commission for only $100 (5%).
-</p>
-
-<p><strong>Example 4:</strong></p>
-<p>The site is letting users "fill the balance/buy credits" and then spend their balance to pay for premium features. The balance is filled by purchasing items in Credit Packs channel. The affiliate is getting 1 cent for every dollar filled to balance</p>
-<p>The rules needs to be restricted to items in Credits Packs product group.</p>
-
-<p><strong>Example 5:</strong></p>
-<p>The site from example 4 is also letting users buy premium features directly using PayPal (not necessarely balance). The affiliate should get 0.5% for these purchases as well.</p>
-<p>We need to add a rule that will be restricted to purchases in "premium features" product group and using PayPal gateway (so that purchases or premium features using balance/creadits system are not rewarded).</p>
+<p>Note that 'total revenue' here refers to the amount that the store (not author) has received (taxes and shipping not counted)</p>
 
 
 	<h2><a name="balance" href="#top">&uarr;</a>Balance and payouts</h2>
@@ -150,7 +104,7 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 <h3><a name="balance-credits" href="#top">&uarr;</a>Credits integration</h3>
 
 <p>If you have DevDemon Credits installed, you can perform integration of the modules with simply marking the checkbox in settings.</p>
-<p>If you do so, every commission or payout record of Affiliate+ will be recorded as Credits action.</p>
+<p>If you do so, every commission or payout record of RoyaltEE will be recorded as Credits action.</p>
 <p>The system will assume that 1 dollar (or the currency unit that you use for your store) is equal to 1 credit.</p>
 <p>With integration checkbox marked, the users will be able to spend their earned commission on your site instead of requesting payout (or in addition to that). Besides, they will not be able to request withdraw of amount greater than their Credits balance.</p>
 
@@ -163,9 +117,9 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 <em>{site_name}</em> &mdash; site name;<br />
 <em>{site_url}</em> &mdash; site URL;<br />
 <em>{amount}</em> &mdash; amount requested;<br />
-<em>{member_id}</em> &mdash; affiliate member ID;<br />
-<em>{username}</em> &mdash; affiliate username;<br />
-<em>{screen_name}</em> &mdash; affiliate screen name;<br />
+<em>{member_id}</em> &mdash; author member ID;<br />
+<em>{username}</em> &mdash; author username;<br />
+<em>{screen_name}</em> &mdash; author screen name;<br />
 <em>{cp_link}</em> &mdash; link to payouts section of module's control panel.
 </p>
 
@@ -175,45 +129,31 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 
 	<h2><a name="stats" href="#top">&uarr;</a>Stats</h2>
 	
-<p>The Stats tab in module's Control Panel display affiliate statistics for your system.</p>	
-<p>You can see the records for all commissions, including affiliate name, link to order details and customer profile.</p>
-<p>You can also narrow down results by certain affiliate or display only selected period of time.</p>
+<p>The Stats tab in module's Control Panel display author statistics for your system.</p>	
+<p>You can see the records for all commissions, including author name, link to product and order details.</p>
+<p>You can also narrow down results by certain author or display only selected period of time.</p>
 
 	<h2><a name="tags" href="#top">&uarr;</a>Template tags</h2>
 
-<h3><a name="tags-link" href="#top">&uarr;</a>Affiliate link</h3>
-
-<p><strong>{exp:affiliate_plus:link}</strong></p>
-
-<code>
-&lt;a href="{exp:affiliate_plus:link return="/profile/{username}"}"&gt;Click here&lt;/a&gt;
-</code>
-
-<p>Prints out affiliate link for logged in user.</p>
-<p><strong>Parameters:</strong>
-<ul>
-<li><dfn>return</dfn> &mdash; a page to redirect visitor after registrering affiliate hit. Can be a full URL or URI segments.<br />Use <em>return="SAME_PAGE"</em> to redirect to the page used to generate link.</li>
-</ul>
-</p>
 
 
 <h3><a name="tags-balance" href="#top">&uarr;</a>Balance</h3>
 
-<p><strong>{exp:affiliate_plus:balance}</strong></p>
+<p><strong>{exp:royaltee:balance}</strong></p>
 
 <code>
-{exp:affiliate_plus:balance} USD on your affiliate balance
+{exp:royaltee:balance} USD on your author's commissions balance
 </code>
 
-<p>Prints out user's current affiliate balance: total amount earned minus amount withdrawn. If you have DevDemon Credits module installed the balance can't be greater than credits balance. </p>
+<p>Prints out user's current royalty balance: total amount earned minus amount withdrawn. If you have DevDemon Credits module installed the balance can't be greater than credits balance. </p>
 
 
 <h3><a name="tags-stats" href="#top">&uarr;</a>Stats</h3>
 
-<p><strong>{exp:affiliate_plus:stats}</strong></p>
+<p><strong>{exp:royaltee:stats}</strong></p>
 
 <code>
-{exp:affiliate_plus:stats limit="20" paginate="bottom"}<br />
+{exp:royaltee:stats limit="20" paginate="bottom"}<br />
 {if count==1}<br />
 &lt;p&gt;Total hits: {total_hits}&lt;/p&gt;<br />
 {/if}<br />
@@ -221,7 +161,7 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 &lt;p&gt;{count}. ${commission}, recorded on {record_date format="%Y-%m-%d"}&lt;/p&gt;<br />
 {/if}<br />
 {paginate}{pagination_links}{/paginate}<br />
-{/exp:affiliate_plus:stats}<br />
+{/exp:royaltee:stats}<br />
 </code>
 
 
@@ -245,23 +185,19 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 <p><strong>Variables:</strong>
 <ul>
 
-<li><dfn>total_hits</dfn> &mdash; total number of click on affiliate links generated by this user</li>
-<li><dfn>total_commission_records</dfn> &mdash; total number of affiliate commissions recorded for user</li>
+<li><dfn>total_commission_records</dfn> &mdash; total number of commissions recorded for user (matches the number of sold items)</li>
 
 <li><dfn>total_results</dfn> &mdash; total number of records on page</li>
 <li><dfn>count</dfn> &mdash; rows counter on each page</li>
 
-<li><dfn>balance</dfn> &mdash; the user's affiliate balance</li>
+<li><dfn>balance</dfn> &mdash; the user's commission balance</li>
 <li><dfn>withdraw_minimum</dfn> &mdash; withdrawal minimum set in settings</li>
-
-<li><dfn>referral_member_id</dfn> &mdash; member ID of reffered customer who made order resulting in commission</li>
-<li><dfn>referral_username</dfn> &mdash; username of reffered customer who made order resulting in commission</li>
-<li><dfn>referral_screen_name</dfn> &mdash; screen name of reffered customer who made order resulting in commission</li>
 
 <li><dfn>commission_id</dfn> &mdash; internal ID of commission record</li>
 <li><dfn>order_id</dfn> &mdash; ID of order/purchase that resulted in commission</li>
+<li><dfn>product_id</dfn> &mdash; ID of product sold</li>
+<li><dfn>product_title</dfn> &mdash; title of product sold</li>
 <li><dfn>method</dfn> &mdash; method representing either e-commerce solution used or withdraw</li>
-<li><dfn>hit_id</dfn> &mdash; corrsponding hit record ID</li>
 <li><dfn>credits</dfn> &mdash; amount added</li>
 <li><dfn>commission</dfn> &mdash; same as {credits}</li>
 <li><dfn>credits_pending</dfn> &mdash; amount scheduled for withdraw</li>
@@ -275,17 +211,17 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 
 <h3><a name="tags-payouts" href="#top">&uarr;</a>Withdraw history</h3>
 
-<p><strong>{exp:affiliate_plus:withdraw_history}</strong></p>
+<p><strong>{exp:royaltee:withdraw_history}</strong></p>
 
 <code>
-{exp:affiliate_plus:withdraw_history limit="20" paginate="bottom"}<br />
+{exp:royaltee:withdraw_history limit="20" paginate="bottom"}<br />
 &lt;p&gt;{count}. ${if amount}{amount}{if:else}{amount_pending}{/if}, requested on {request_date format="%Y-%m-%d"} and {status}{if status=='Processed'} on {payment_date format="%Y-%m-%d"}{/if}&lt;/p&gt;<br />
 {paginate}{pagination_links}{/paginate}<br />
-{/exp:affiliate_plus:withdraw_history}<br />
+{/exp:royaltee:withdraw_history}<br />
 </code>
 
 
-<p>Displays history of Affiliate+ payouts to logged in user.</p>
+<p>Displays history of RoyaltEE payouts to logged in user.</p>
 
 
 <p><strong>Tag parameters (all optional):</strong>
@@ -310,7 +246,7 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 <li><dfn>total_results</dfn> &mdash; total number of records on page</li>
 <li><dfn>count</dfn> &mdash; message counter on each page</li>
 
-<li><dfn>balance</dfn> &mdash; the user's current affiliate balance</li>
+<li><dfn>balance</dfn> &mdash; the user's current commission balance</li>
 <li><dfn>withdraw_minimum</dfn> &mdash; withdrawal minimum set in settings</li>
 
 <li><dfn>payout_id</dfn> &mdash; internal ID of payout record</li>
@@ -331,15 +267,15 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 
 <h3><a name="tags-withdraw" href="#top">&uarr;</a>Request withdraw</h3>
 
-<p><strong>{exp:affiliate_plus:withdraw_request_form}</strong></p>
+<p><strong>{exp:royaltee:withdraw_request_form}</strong></p>
 
 
 <code>
-{exp:affiliate_plus:withdraw_request_form return="SAME_PAGE"}<br />
+{exp:royaltee:withdraw_request_form return="SAME_PAGE"}<br />
 &lt;p&gt;Enter amount you widh to withdraw (${amount_min} or more). The total amount available is ${amount}&lt;/p&gt;<br />
 &lt;input type="text" name="amount" value="{amount}" /&gt;<br />
 &lt;input type="submit" value="Request payout" /&gt;<br />
-{/exp:affiliate_plus:withdraw_request_form}<br />
+{/exp:royaltee:withdraw_request_form}<br />
 </code>
 
 <p><strong>Form fields</strong>:
@@ -359,44 +295,11 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 <ul>
 <li><dfn>return</dfn> &mdash; a page to return after submitting request. Can be a full URL or URI segments.<br />Use <em>return="SAME_PAGE"</em> to return user to the page used to display form.</li>
 <li><dfn>skip_success_message="yes"</dfn> &mdash; force redirect to return page without showing success message.</li>
-<li><dfn>id</dfn> &mdash; form ID (defaults to 'affiliate_plus_form')</li>
-<li><dfn>class</dfn> &mdash; form class (defaults to 'affiliate_plus_form')</li>
-<li><dfn>name</dfn> &mdash; form name (defaults to 'affiliate_plus_form')</li>
+<li><dfn>id</dfn> &mdash; form ID (defaults to 'royaltee_form')</li>
+<li><dfn>class</dfn> &mdash; form class (defaults to 'royaltee_form')</li>
+<li><dfn>name</dfn> &mdash; form name (defaults to 'royaltee_form')</li>
 </ul>
 </p>
-
-
-
-<h3><a name="tags-referrer" href="#top">&uarr;</a>Referrer</h3>
-
-
-<p>Get information about who referred certain user.</p>
-
-<p><strong>{exp:affiliate_plus:referrer}</strong></p>
-
-<code>
-{exp:affiliate_plus:referrer username="{segment_3}"}<br />
-&lt;p&gt;Referred by &lt;a href="{path={affiliate_username}}"&gt;{affiliate_screen_name}&lt;/a&gt;&lt;/p&gt;<br />
-{if no_results}No referral record{/if}<br />
-{/exp:affiliate_plus:referrer}<br />
-</code>
-
-
-<p><strong>Variables:</strong>
-<ul>
-<li><dfn>affiliate_member_id</dfn> &mdash; member ID of affiliate who referred this user</li>
-<li><dfn>affiliate_username</dfn> &mdash; username of affiliate who referred this user</li>
-<li><dfn>affiliate_screen_name</dfn> &mdash; screen name of affiliate who referred this user</li>
-</ul>
-</p>
-
-<p><strong>Parameters:</strong>
-<ul>
-<li><dfn>member_id</dfn> &mdash; member ID of referred member</li>
-<li><dfn>username</dfn> &mdash; username of referred member</li>
-</ul>
-</p>
-<p>If both username and member_id are omited, will display info related to logged in user.</p>
 
 
 
@@ -408,7 +311,7 @@ Discounts treatment (because comission is calculated per-product, dicount need t
 <!-- {user_guide_comments} -->
 
 <div id="footer">
-  <address>Copyright &copy; 2011 Yuri Salimovskiy <a href="http://www.intoeetive.com/">intoEEtive.com</a></address>
+  <address>Copyright &copy; 2014 Yuri Salimovskiy <a href="http://www.intoeetive.com/">intoEEtive.com</a></address>
 </div>
 
 </body>

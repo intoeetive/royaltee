@@ -469,19 +469,18 @@ class Royaltee {
     	$global_vars = array();
     	
     	$q = $this->EE->db->select("COUNT('*') AS count")
-  				->from('royaltee_hits')
-				 ->where('referrer_id', $this->EE->session->userdata('member_id'))
+  				->from('royaltee_commissions')
+				 ->where('member_id', $this->EE->session->userdata('member_id'))
 				 ->get();
-		$global_vars['total_hits'] = $q->row('count');
+		$global_vars['total_commission_records'] = $q->row('count');
 		
-		if ($global_vars['total_hits']==0)
+		if ($global_vars['total_commission_records']==0)
         {
             return $this->EE->TMPL->no_results();
         }
         
         $global_vars['balance'] = $this->balance();
  		$global_vars['withdraw_minimum'] = (float)$ext_settings['withdraw_minimum'];
- 		$global_vars['total_commission_records'] = 0;
  		
  		$tagdata = $this->EE->TMPL->tagdata;
  		
@@ -495,17 +494,23 @@ class Royaltee {
        
         switch ($ext_settings['ecommerce_solution'])
         {
-   			case 'simplecommerce':
-   			case 'store':
+        	case 'store':
+        		$this->EE->db->select('royaltee_commissions.*, store_order_items.entry_id AS product_id, store_order_items.title AS product_title')
+        			->from('royaltee_commissions')
+                    ->join('store_order_items', 'royaltee_commissions.order_id=store_order_items.order_id', 'left');
+        		break;
+
 			case 'cartthrob':
         	default:
-        		$this->EE->db->select('royaltee_commissions.*, referrals.member_id AS referral_member_id, referrals.username AS referral_username, referrals.screen_name AS referral_screen_name')
+        		$this->EE->db->select('royaltee_commissions.*, cartthrob_order_items.entry_id AS product_id, cartthrob_order_items.title AS product_title')
         			->from('royaltee_commissions')
-        			->where('royaltee_commissions.member_id', $this->EE->session->userdata('member_id'))
-        			->where('royaltee_commissions.order_id != ', 0)
-					->join('members AS referrals', 'royaltee_commissions.referral_id=referrals.member_id', 'left');
+                    ->join('cartthrob_order_items', 'royaltee_commissions.order_id=cartthrob_order_items.order_id', 'left');
         		break;
         }
+        
+        $this->EE->db->where('royaltee_commissions.order_id > ', 0);
+        $this->EE->db->where('members.member_id', $this->EE->session->userdata('member_id'));
+        $this->EE->db->order_by('record_date', 'desc');
 		
 		$this->EE->db->limit($perpage, $start);
         $query = $this->EE->db->get();
@@ -516,28 +521,10 @@ class Royaltee {
 	        foreach ($query->result_array() as $row)
 	        {
 	           $row['commission'] = $row['credits']; 
-	           $row['method'] = $this->EE->lang->line($row['method']); 
 	           $vars[] = $row;
 	        }
 	        
 	        $tagdata = $this->EE->TMPL->parse_variables($tagdata, $vars);
-	
-			if ($start==0 && $perpage > $query->num_rows())
-			{
-	        	$global_vars['total_commission_records'] = $query->num_rows();
-	 		}
-	 		else
-	 		{
-	 			
-	  			$this->EE->db->select("COUNT('*') AS count")
-	  				->from('royaltee_commissions')
-					 ->where('member_id', $this->EE->session->userdata('member_id'))
-					 ->where('order_id != ', 0);
-		        
-		        $q = $this->EE->db->get();
-		        
-		        $global_vars['total_commission_records']  = $q->row('count');
-	 		}
  		}
  		else
  		{
@@ -584,7 +571,6 @@ class Royaltee {
        
         switch ($ext_settings['ecommerce_solution'])
         {
-   			case 'simplecommerce':
    			case 'store':
 			case 'cartthrob':
         	default:

@@ -3,7 +3,7 @@
 if ( ! defined('ROYALTEE_ADDON_NAME'))
 {
 	define('ROYALTEE_ADDON_NAME',         'RoyaltEE');
-	define('ROYALTEE_ADDON_VERSION',      '0.1');
+	define('ROYALTEE_ADDON_VERSION',      '1.0');
 }
 
 $config['name']=ROYALTEE_ADDON_NAME;
