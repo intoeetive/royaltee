@@ -135,10 +135,7 @@ class Royaltee_ext {
         require_once PATH_THIRD.'/store/src/Model/Order.php';
         require_once PATH_THIRD.'/store/src/Model/OrderItem.php';
         require_once PATH_THIRD.'/store/src/Model/Product.php';
-        
-        var_dump($order);
-        exit();
-        
+ 
         $paid = $order->getIsOrderPaidAttribute();
         if ($paid==false) return false;        
         

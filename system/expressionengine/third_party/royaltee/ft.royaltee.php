@@ -47,7 +47,10 @@ class Royaltee_ft extends EE_Fieldtype {
 	function display_field($data)
 	{
         $this->EE->lang->loadfile('royaltee');
-        $data = unserialize(base64_decode($data));   
+        if (!is_array($data))
+        {
+            $data = unserialize(base64_decode($data));  
+        } 
         $view_data = array(); 
         for ($i=0; $i<$this->modifiers_nr; $i++)
         {
