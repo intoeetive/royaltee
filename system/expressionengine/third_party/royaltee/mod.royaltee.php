@@ -303,6 +303,11 @@ class Royaltee {
 			'record_date'		=> $this->EE->localize->now
 		);
 		$this->EE->db->insert('royaltee_commissions', $insert);
+        
+        $insert['payout_id'] = $this->EE->db->insert_id();
+
+        $this->EE->extensions->call('royaltee_withdraw_request_end', $insert);
+        if ($this->EE->extensions->end_script === TRUE) return;
 		
 		//notify site admin
 		$this->EE->load->library('email');
