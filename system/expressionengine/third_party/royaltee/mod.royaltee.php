@@ -305,7 +305,9 @@ class Royaltee {
 		$this->EE->db->insert('royaltee_commissions', $insert);
         
         $insert['payout_id'] = $this->EE->db->insert_id();
-
+        
+        
+        //extension hook
         $this->EE->extensions->call('royaltee_withdraw_request_end', $insert);
         if ($this->EE->extensions->end_script === TRUE) return;
 		
@@ -450,9 +452,18 @@ class Royaltee {
 	
 	function stats()
 	{
-        if ($this->EE->session->userdata('member_id')==0)
+        if ($this->EE->session->userdata('member_id')==0 && $this->EE->TMPL->fetch_param('member_id')=='')
         {
         	return $this->EE->TMPL->no_results();
+        }
+        
+        if ($this->EE->TMPL->fetch_param('member_id')!='')
+        {
+            $member_id = $this->EE->TMPL->fetch_param('member_id');
+        }
+        else
+        {
+            $member_id = $this->EE->session->userdata('member_id');
         }
 		
 		$ext_settings = $this->EE->royaltee_lib->_get_ext_settings();
@@ -473,10 +484,17 @@ class Royaltee {
     	$vars = array();
     	$global_vars = array();
     	
-    	$q = $this->EE->db->select("COUNT('*') AS count")
+        $this->EE->db->select("COUNT('*') AS count")
   				->from('royaltee_commissions')
-				 ->where('member_id', $this->EE->session->userdata('member_id'))
-				 ->get();
+				 ->where('member_id', $member_id);
+        if ($this->EE->TMPL->fetch_param('month')!='' && $this->EE->TMPL->fetch_param('year')!='')
+        {
+            $first_minute = mktime(0, 0, 0, $this->EE->TMPL->fetch_param('month'), 1, $this->EE->TMPL->fetch_param('year'));
+            $last_minute = mktime(23, 59, 0, $this->EE->TMPL->fetch_param('month'), date('t', $first_minute), $this->EE->TMPL->fetch_param('year'));
+            $this->EE->db->where('record_date >= ', $first_minute);
+            $this->EE->db->where('record_date <= ', $last_minute);
+        }
+    	$q = $this->EE->db->get();
 		$global_vars['total_commission_records'] = $q->row('count');
 		
 		if ($global_vars['total_commission_records']==0)
@@ -500,8 +518,16 @@ class Royaltee {
         switch ($ext_settings['ecommerce_solution'])
         {
         	case 'store':
-        		$this->EE->db->select('royaltee_commissions.*, store_order_items.entry_id AS product_id, store_order_items.title AS product_title')
-        			->from('royaltee_commissions')
+        		if ($this->EE->TMPL->fetch_param('group_by_product')=='yes')
+                {
+                    $this->EE->db->select('royaltee_commissions.member_id, SUM(credits) AS credits, SUM(credits_pending) AS credits_pending, royaltee_commissions.record_date, store_order_items.entry_id AS product_id, store_order_items.title AS product_title, SUM(price) AS total_cost, COUNT(*) as items_sold');
+                    $this->EE->db->group_by('product_id');
+                }
+                else
+                {
+                    $this->EE->db->select('royaltee_commissions.*, store_order_items.entry_id AS product_id, store_order_items.title AS product_title');
+                }
+        		$this->EE->db->from('royaltee_commissions')
                     ->join('store_order_items', 'royaltee_commissions.order_id=store_order_items.order_id', 'left');
         		break;
 
@@ -514,8 +540,13 @@ class Royaltee {
         }
         
         $this->EE->db->where('royaltee_commissions.order_id > ', 0);
-        $this->EE->db->where('members.member_id', $this->EE->session->userdata('member_id'));
+        $this->EE->db->where('royaltee_commissions.member_id', $member_id);
         $this->EE->db->order_by('record_date', 'desc');
+        if ($this->EE->TMPL->fetch_param('month')!='' && $this->EE->TMPL->fetch_param('year')!='')
+        {
+            $this->EE->db->where('record_date >= ', $first_minute);
+            $this->EE->db->where('record_date <= ', $last_minute);
+        }
 		
 		$this->EE->db->limit($perpage, $start);
         $query = $this->EE->db->get();

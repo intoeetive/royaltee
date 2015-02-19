@@ -305,7 +305,7 @@ Log in to your Control Panel to process the payout.
 "Pay with MassPay",
 
 "royaltee_payout" =>
-"Affiliate Payout",
+"Royalty Payout",
 
 "masspay_processed" =>
 "%x withdraw requests have been processed using MassPay",
