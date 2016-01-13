@@ -59,6 +59,7 @@ class Royaltee_upd {
 		$fields = array(
 			'commission_id'		=> array('type' => 'INT',		'unsigned' => TRUE, 'auto_increment' => TRUE),
 			'order_id'			=> array('type' => 'INT',		'default' => 0),
+            'product_id'		=> array('type' => 'INT',		'default' => 0),
 			'method'			=> array('type' => 'VARCHAR',	'constraint'=> 50,	'default' => ''),//carttrob, store, withdraw
 			'member_id'			=> array('type' => 'INT',		'unsigned' => TRUE, 'default' => 0),
 			'credits'			=> array('type' => 'DECIMAL',	'constraint' => '7,2', 'default' => 0),
@@ -69,6 +70,7 @@ class Royaltee_upd {
 		$this->EE->dbforge->add_field($fields);
 		$this->EE->dbforge->add_key('commission_id', TRUE);
 		$this->EE->dbforge->add_key('order_id');
+        $this->EE->dbforge->add_key('product_id');
 		$this->EE->dbforge->add_key('method');
 		$this->EE->dbforge->add_key('member_id');
 		$this->EE->dbforge->create_table('royaltee_commissions', TRUE);
@@ -130,7 +132,16 @@ class Royaltee_upd {
     
     function update($current='') 
 	{ 
-		
+		if ($current < 1.1)
+        {
+            $this->EE->load->dbforge(); 
+
+    		if ($this->EE->db->field_exists('product_id', 'royaltee_commissions') == FALSE)
+    		{
+    			$this->EE->dbforge->add_column('royaltee_commissions', array('product_id' => array('type' => 'INT',		'default' => 0) ) );
+                $this->EE->db->query('ALTER TABLE exp_royaltee_commissions ADD INDEX product_id (product_id)');
+    		}
+        }
 		return TRUE; 
     } 
 	

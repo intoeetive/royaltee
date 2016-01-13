@@ -38,7 +38,7 @@ class Royaltee_mcp {
         
         $this->EE->load->library('royaltee_lib');
         
-        if ($this->EE->config->item('app_version')>=260)
+        if (version_compare(APP_VER, '2.6.0', '>='))
         {
         	$this->EE->view->cp_page_title = lang('royaltee_module_name');
         }
@@ -645,7 +645,7 @@ class Royaltee_mcp {
     
     function _string_to_timestamp($human_string, $localized = TRUE)
     {
-        if ($this->EE->config->item('app_version')<260)
+        if (version_compare(APP_VER, '2.6.0', '<'))
         {
             return $this->EE->localize->convert_human_date_to_gmt($human_string, $localized);
         }
@@ -709,18 +709,23 @@ class Royaltee_mcp {
         switch ($ext_settings['ecommerce_solution'])
         {
         	case 'store':
-        		$this->EE->db->select('royaltee_commissions.*, screen_name, store_order_items.entry_id, store_order_items.title')
+        		$this->EE->db->select('royaltee_commissions.*, members.screen_name, channel_titles.title, store_orders.order_id as store_order_id, store_orders.member_id as customer_id, customers.screen_name as customer_screen_name')
         			->from('royaltee_commissions')
 					->join('members', 'royaltee_commissions.member_id=members.member_id', 'left')
-                    ->join('store_order_items', 'royaltee_commissions.order_id=store_order_items.order_id', 'left');
+                    ->join('channel_titles', 'royaltee_commissions.product_id=channel_titles.entry_id', 'left')
+                    ->join('store_orders', 'royaltee_commissions.order_id=store_orders.id', 'left')
+                    ->join('members AS customers', 'customers.member_id=store_orders.member_id', 'left')
+                    ;
         		break;
 
 			case 'cartthrob':
         	default:
-        		$this->EE->db->select('royaltee_commissions.*, screen_name, cartthrob_order_items.entry_id, cartthrob_order_items.title')
+        		$this->EE->db->select('royaltee_commissions.*, members.screen_name, cartthrob_order_items.entry_id, cartthrob_order_items.title, customers.member_id as customer_id, customers.screen_name as customer_screen_name')
         			->from('royaltee_commissions')
 					->join('members', 'royaltee_commissions.member_id=members.member_id', 'left')
-                    ->join('cartthrob_order_items', 'royaltee_commissions.order_id=cartthrob_order_items.order_id', 'left');
+                    ->join('cartthrob_order_items', 'royaltee_commissions.order_id=cartthrob_order_items.order_id', 'left')
+                    ->join('channel_titles', 'royaltee_commissions.order_id=channel_titles.entry_id', 'left')
+                    ->join('members AS customers', 'channel_titles.author_id=customers.member_id', 'left');
         		break;
         }
         
@@ -773,11 +778,14 @@ class Royaltee_mcp {
         {
            $vars['data'][$i]['date'] = $this->EE->localize->format_date($date_format, $row['record_date']);
            $vars['data'][$i]['author'] = "<a href=\"".BASE.AMP.'C=myaccount'.AMP.'id='.$row['member_id']."\">".$row['screen_name']."</a>";    
-           switch ($ext_settings['ecommerce_solution'])
+           switch ($row['method'])
 	       {
-	        	case 'store':
-	        		$vars['data'][$i]['order'] = "<a href=\"".BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=store'.AMP.'method=orders'.AMP.'order_id='.$row['order_id']."\">".lang('order').NBS.$row['order_id']."</a>";   
-                    $vars['data'][$i]['product'] = "<a href=\"".BASE.AMP.'C=content_publish'.AMP.'M=entry_form'.AMP.'entry_id='.$row['entry_id']."\">".$row['title']."</a>"; 
+	        	case 'withdraw':
+	        		$vars['data'][$i]['order'] = lang('withdraw');   
+	        		break;
+                case 'store':
+	        		$vars['data'][$i]['order'] = "<a href=\"".BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=store'.AMP.'method=orders'.AMP.'order_id='.$row['store_order_id']."\">".lang('order').NBS.$row['store_order_id']."</a>";   
+                    $vars['data'][$i]['product'] = "<a href=\"".BASE.AMP.'C=content_publish'.AMP.'M=entry_form'.AMP.'entry_id='.$row['product_id']."\">".$row['title']."</a>"; 
 	        		break;
         		case 'cartthrob':
         		default:
@@ -785,8 +793,15 @@ class Royaltee_mcp {
                     $vars['data'][$i]['product'] = "<a href=\"".BASE.AMP.'C=content_publish'.AMP.'M=entry_form'.AMP.'entry_id='.$row['entry_id']."\">".$row['title']."</a>".BR;   
 					break;
             } 
-            $vars['data'][$i]['customer'] = ($row['member_id']!=0)?"<a href=\"".BASE.AMP.'C=myaccount'.AMP.'id='.$row['member_id']."\">".$row['screen_name']."</a>":lang('guest');  
+            $vars['data'][$i]['customer'] = ($row['customer_id']!=0)?"<a href=\"".BASE.AMP.'C=myaccount'.AMP.'id='.$row['customer_id']."\">".$row['customer_screen_name']."</a>":lang('guest');  
            $vars['data'][$i]['commission'] = $row['credits'];    
+           
+           if ($row['method']=='withdraw')
+           {
+            $vars['data'][$i]['product'] = ""; 
+            $vars['data'][$i]['customer'] = "";
+           }
+           
            $i++;
  			
         }

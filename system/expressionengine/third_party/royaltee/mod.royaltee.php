@@ -528,7 +528,7 @@ class Royaltee {
                     $this->EE->db->select('royaltee_commissions.*, store_order_items.entry_id AS product_id, store_order_items.title AS product_title');
                 }
         		$this->EE->db->from('royaltee_commissions')
-                    ->join('store_order_items', 'royaltee_commissions.order_id=store_order_items.order_id', 'left');
+                    ->join('store_order_items', 'exp_royaltee_commissions.order_id = exp_store_order_items.order_id AND exp_royaltee_commissions.product_id = exp_store_order_items.entry_id', 'left');
         		break;
 
 			case 'cartthrob':
@@ -549,14 +549,23 @@ class Royaltee {
         }
 		
 		$this->EE->db->limit($perpage, $start);
+        //echo $this->EE->db->_compile_select();
         $query = $this->EE->db->get();
 
         if ($query->num_rows()>0)
         {
-	        
+            $total_items_sold = 0;
+            $total_price = 0;
+            $total_royalty = 0;
 	        foreach ($query->result_array() as $row)
 	        {
 	           $row['commission'] = $row['credits']; 
+               $total_items_sold += $row['items_sold'];
+               $total_price += $row['total_cost'];
+               $total_royalty += $row['credits'];
+               $row['total_items_sold'] = $total_items_sold;
+               $row['total_price'] = $total_price;
+               $row['total_royalty'] = $total_royalty;
 	           $vars[] = $row;
 	        }
 	        
@@ -661,7 +670,6 @@ class Royaltee {
 				$row['amount_pending'] = -$row['amount_pending'];
 				$row['transaction_id'] = '';
 				$row['comment'] = '';
-				$row['request_date'] = '';
 				$row['payment_date'] = '';
 			}
 			else
@@ -712,10 +720,10 @@ class Royaltee {
     
     function _process_pagination($total, $perpage, $start, $basepath='', $out='', $paginate='bottom', $paginate_tagdata='')
     {
-        if ($this->EE->config->item('app_version') >= 240)
+        if (version_compare(APP_VER, '2.4.0', '>='))
 		{
 	        $this->EE->load->library('pagination');
-	        if ($this->EE->config->item('app_version') >= 260)
+	        if (version_compare(APP_VER, '2.6.0', '>='))
 	        {
 	        	$pagination = $this->EE->pagination->create(__CLASS__);
 	        }
@@ -723,7 +731,7 @@ class Royaltee {
 	        {
 	        	$pagination = new Pagination_object(__CLASS__);
 	        }
-            if ($this->EE->config->item('app_version') >= 280)
+            if (version_compare(APP_VER, '2.8.0', '>='))
             {
                 $this->EE->TMPL->tagdata = $pagination->prepare($this->EE->TMPL->tagdata);
                 $pagination->build($total, $perpage);

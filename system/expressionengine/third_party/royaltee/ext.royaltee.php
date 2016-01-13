@@ -258,6 +258,7 @@ class Royaltee_ext {
             //ok, time to add the commission record!
     		$insert = array(
     			'order_id'			=> $order->id,
+                'product_id'		=> $item['entry_id'],
     			'method'			=> 'store',
     			'member_id'			=> $member_id,
     			'credits'			=> $commission_amount,
@@ -345,20 +346,23 @@ class Royaltee_ext {
             $rate = 0;
             foreach ($royaltee_fields as $royaltee_field)
             {
-                $field = 'field_id_'.$royaltee_field;
-				$q = $this->EE->db->select($field)
-						->from('channel_data')
-						->where_in('channel_data.entry_id', $item['product_id'])
-						->get();
-                if ($q->row($field)!='')
+                if ($item['product_id']!==NULL)
                 {
-                    $rules = unserialize(base64_decode($q->row($field)));
-
-                    foreach ($rules as $rule)
+                    $field = 'field_id_'.$royaltee_field;
+    				$q = $this->EE->db->select($field)
+    						->from('channel_data')
+    						->where_in('channel_data.entry_id', $item['product_id'])
+    						->get();
+                    if ($q->row($field)!='')
                     {
-                        if ($rule['rate']!='')
+                        $rules = unserialize(base64_decode($q->row($field)));
+    
+                        foreach ($rules as $rule)
                         {
-                            $all_rules[$rule['sales']] = $rule['rate'];
+                            if ($rule['rate']!='')
+                            {
+                                $all_rules[$rule['sales']] = $rule['rate'];
+                            }
                         }
                     }
                 }
@@ -444,6 +448,7 @@ class Royaltee_ext {
             //ok, time to add the commission record!
     		$insert = array(
     			'order_id'			=> $order_data['order_id'],
+                'product_id'		=> $item['product_id'],
     			'method'			=> 'carttrob',
     			'member_id'			=> $member_id,
     			'credits'			=> $commission_amount,
